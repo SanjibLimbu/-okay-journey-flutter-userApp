@@ -20,6 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Result> _foundUsers = [];
 
   List<Result> _allUsers = [];
+  final GlobalKey expansionTileKey = GlobalKey();
 
   //calling data form the api
   void getUserData() async {
@@ -122,10 +123,12 @@ class _HomeScreenState extends State<HomeScreen> {
                         padding: const EdgeInsets.all(8),
                         itemCount: _foundUsers.length,
                         itemBuilder: (BuildContext context, int index) {
-                          return UserCard(foundUsers: _foundUsers[index]);
+                          return UserCard(
+                            foundUsers: _foundUsers[index],
+                          );
                         })
                     : const Text(
-                        'No results found',
+                        'No User found',
                         style: TextStyle(fontSize: 24),
                       ),
               ),
@@ -138,7 +141,10 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 class UserCard extends StatefulWidget {
-  const UserCard({super.key, required this.foundUsers});
+  const UserCard({
+    super.key,
+    required this.foundUsers,
+  });
 
   final Result foundUsers;
 
@@ -150,6 +156,19 @@ class _UserCardState extends State<UserCard> {
   bool _expanded = false;
 
   late Result user = widget.foundUsers;
+
+  final GlobalKey expansionTileKey = GlobalKey();
+
+  void _scrollToSelectedContent({required GlobalKey expansionTileKey}) {
+    final keyContext = expansionTileKey.currentContext;
+    if (keyContext != null) {
+      Future.delayed(const Duration(milliseconds: 200)).then((value) {
+        Scrollable.ensureVisible(keyContext,
+            duration: const Duration(milliseconds: 200));
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -158,26 +177,163 @@ class _UserCardState extends State<UserCard> {
       ),
       child: ExpansionPanelList(
         elevation: 0,
+        key: expansionTileKey,
         children: [
           ExpansionPanel(
             headerBuilder: (context, isExpanded) {
               return ListTile(
-
-                leading: Image.network(user.picture.thumbnail),
+                leading: ClipRRect(
+                  borderRadius: BorderRadius.circular(4),
+                  child: Image.network(user.picture.thumbnail)),
                 title: Text(user.login.username),
-                subtitle: Text('${user.name.title}. ${user.name.first} ${user.name.last}'),
+                subtitle: Text(
+                  '${user.name.title}. ${user.name.first} ${user.name.last}',
+                ),
               );
             },
-            body: Column(
-              children: [],
+            body: Padding(
+              padding: const EdgeInsets.only(
+                left: 16,
+                right: 16,
+                bottom: 16,
+              ),
+              child: SizedBox(
+                width: double.infinity,
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        const Expanded(
+                          flex: 2,
+                          child: Text('Name'),
+                        ),
+                        Expanded(
+                            flex: 5,
+                            child: Text(
+                              '${user.name.title}. ${user.name.first} ${user.name.last}',
+                              textAlign: TextAlign.left,
+                            ))
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        const Expanded(
+                          flex: 2,
+                          child: Text('Gender'),
+                        ),
+                        Expanded(
+                            flex: 5,
+                            child: Text(
+                              user.gender,
+                              textAlign: TextAlign.left,
+                            ))
+                      ],
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Expanded(
+                          flex: 2,
+                          child: Text('Email'),
+                        ),
+                        Expanded(
+                            flex: 5,
+                            child: Text(
+                              user.email,
+                              textAlign: TextAlign.left,
+                            ))
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        const Expanded(
+                          flex: 2,
+                          child: Text('Phone'),
+                        ),
+                        Expanded(
+                            flex: 5,
+                            child: Text(
+                              user.phone,
+                              textAlign: TextAlign.left,
+                            ))
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        const Expanded(
+                          flex: 2,
+                          child: Text('Cell'),
+                        ),
+                        Expanded(
+                            flex: 5,
+                            child: Text(
+                              user.cell,
+                              textAlign: TextAlign.left,
+                            ))
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        const Expanded(
+                          flex: 2,
+                          child: Text('DOB'),
+                        ),
+                        Expanded(
+                            flex: 5,
+                            child: Text(
+                              user.dob.date.toString().substring(0, 9),
+                              textAlign: TextAlign.left,
+                            ))
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        const Expanded(
+                          flex: 2,
+                          child: Text('Age'),
+                        ),
+                        Expanded(
+                            flex: 5,
+                            child: Text(
+                              user.dob.age.toString(),
+                              textAlign: TextAlign.left,
+                            ))
+                      ],
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Expanded(
+                          flex: 2,
+                          child: Text('Location'),
+                        ),
+                        Expanded(
+                            flex: 5,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('Country - ${user.location.country}'),
+                                Text('State - ${user.location.state}'),
+                                Text('City - ${user.location.city}'),
+                                Text('Postcode - ${user.location.postcode}'),
+                              ],
+                            ))
+                      ],
+                    ),
+                  ],
+                ),
+              ),
             ),
             isExpanded: _expanded,
             canTapOnHeader: true,
           )
         ],
         expansionCallback: (panelIndex, isExpanded) {
-          _expanded = !_expanded;
-          setState(() {});
+          setState(() {
+            _expanded = !_expanded;
+            _scrollToSelectedContent(expansionTileKey: expansionTileKey);
+          });
         },
       ),
     );
