@@ -144,7 +144,7 @@ class Id {
   });
 
   String name;
-  String value;
+  String? value;
 
   factory Id.fromJson(Map<String, dynamic> json) => Id(
         name: json["name"],
