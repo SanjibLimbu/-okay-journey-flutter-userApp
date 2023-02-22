@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:user_app/const/style.dart';
 
 class LabelValue extends StatelessWidget {
   const LabelValue({
@@ -17,13 +18,13 @@ class LabelValue extends StatelessWidget {
       children: [
         Expanded(
           flex: 2,
-          child: Text(label, style: const TextStyle(fontSize: 13)),
+          child: Text(label, style: textStyle),
         ),
         Expanded(
           flex: 5,
           child: Text(
             value,
-            style: const TextStyle(fontSize: 13),
+            style: textStyle,
             textAlign: TextAlign.left,
           ),
         )

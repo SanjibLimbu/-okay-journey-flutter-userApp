@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -25,18 +27,16 @@ class _HomeScreenState extends State<HomeScreen> {
   //check connection;
   callConnectionCheck() async {
     Provider.of<UserData>(context, listen: false).getUserData();
+
     ConnectivityResult connectivityResult =
         await (Connectivity().checkConnectivity());
 
     if (connectivityResult == ConnectivityResult.none) {
-      setState(() {
-        checkConnection = false;
-      });
+      checkConnection = false;
     } else {
-      setState(() {
-        checkConnection = true;
-      });
+      checkConnection = true;
     }
+    setState(() {});
   }
 
   @override
