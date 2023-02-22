@@ -14,7 +14,6 @@ class UserCardBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(
-      
         left: 16,
         right: 16,
         bottom: 16,
@@ -25,8 +24,7 @@ class UserCardBody extends StatelessWidget {
           children: [
             LabelValue(
               label: 'Name',
-              value:
-                  '${user.name.title}. ${user.name.first} ${user.name.last}',
+              value: '${user.name.title}. ${user.name.first} ${user.name.last}',
             ),
             LabelValue(
               label: 'Gender',
@@ -60,17 +58,18 @@ class UserCardBody extends StatelessWidget {
                   child: Text('Location'),
                 ),
                 Expanded(
-                    flex: 5,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Country - ${user.location.country}'),
-                        Text('State - ${user.location.state}'),
-                        Text('City - ${user.location.city}'),
-                        Text('Postcode - ${user.location.postcode}'),
-                      ],
-                    ))
+                  flex: 5,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Country - ${user.location.country}'),
+                      Text('State - ${user.location.state}'),
+                      Text('City - ${user.location.city}'),
+                      Text('Postcode - ${user.location.postcode}'),
+                    ],
+                  ),
+                )
               ],
             ),
           ],

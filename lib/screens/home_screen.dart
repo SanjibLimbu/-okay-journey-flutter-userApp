@@ -1,9 +1,9 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:user_app/model/user_data.dart';
 import 'package:user_app/widget/search_widget.dart';
 import 'package:user_app/widget/user_list.dart';
-
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -15,8 +15,28 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
-    Provider.of<UserData>(context, listen: false).getUserData();
+    callConnectionCheck();
+
     super.initState();
+  }
+
+  bool? checkConnection;
+
+  //check connection;
+  callConnectionCheck() async {
+    Provider.of<UserData>(context, listen: false).getUserData();
+    ConnectivityResult connectivityResult =
+        await (Connectivity().checkConnectivity());
+
+    if (connectivityResult == ConnectivityResult.none) {
+      setState(() {
+        checkConnection = false;
+      });
+    } else {
+      setState(() {
+        checkConnection = true;
+      });
+    }
   }
 
   @override
@@ -33,16 +53,35 @@ class _HomeScreenState extends State<HomeScreen> {
             right: 16,
           ),
           child: Column(
-            children: const [
-              SizedBox(
+            children: [
+              const SizedBox(
                 height: 10,
               ),
               //search field
-              SearchWidget(),
-              SizedBox(
+              const SearchWidget(),
+              const SizedBox(
                 height: 15,
               ),
-              UserList()
+
+              if (checkConnection == true)
+                const UserList()
+              else
+                Expanded(
+                  child: Center(
+                    child: ListTile(
+                      title: const Text(
+                        'No Connection.',
+                        textAlign: TextAlign.center,
+                      ),
+                      subtitle: TextButton(
+                        onPressed: () {
+                          callConnectionCheck();
+                        },
+                        child: const Text('Refresh'),
+                      ),
+                    ),
+                  ),
+                ),
             ],
           ),
         ),
@@ -50,5 +89,3 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
-
-

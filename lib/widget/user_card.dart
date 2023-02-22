@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:user_app/model/user_data.dart';
+
 import 'package:user_app/model/users_model.dart';
 import 'package:user_app/widget/user_card_body.dart';
 

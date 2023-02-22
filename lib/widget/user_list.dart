@@ -14,11 +14,7 @@ class UserList extends StatelessWidget {
     return Flexible(
       child: Consumer<UserData>(
         builder: (context, userData, child) {
-          if (userData.foundUsers.isEmpty) {
-            return const Center(
-              child: Text('No Result Found'),
-            );
-          } else {
+          if (userData.foundUsers.isNotEmpty) {
             return ListView.builder(
               padding: const EdgeInsets.all(8),
               itemCount: userData.foundUsers.length,
@@ -26,6 +22,14 @@ class UserList extends StatelessWidget {
                 Result user = userData.foundUsers[index];
                 return UserCard(user: user);
               },
+            );
+          } else if (userData.isLoading==null) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else {
+            return const Center(
+              child: Text('No Result Found'),
             );
           }
         },

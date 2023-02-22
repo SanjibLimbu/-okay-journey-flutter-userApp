@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:user_app/model/users_model.dart';
 import 'package:user_app/services/users_service.dart';
@@ -7,12 +8,17 @@ class UserData extends ChangeNotifier {
 
   List<Result> allUsers = [];
 
+  bool? isLoading;
+
   //calling data form the api
   void getUserData() async {
     foundUsers = await UsersService.getUsersData();
     allUsers = List.from(foundUsers);
+    isLoading = false;
     notifyListeners();
   }
+
+ 
 
   // filter function
   void runUserFilter(String value) async {
